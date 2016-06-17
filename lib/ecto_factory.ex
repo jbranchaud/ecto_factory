@@ -59,10 +59,28 @@ defmodule EctoFactory do
       }
 
   """
-  def insert(factory_name, attrs \\[]) do
-    unless @repo, do: raise(@missing_repo_message)
-    struct = build(factory_name, attrs)
-    @repo.insert!(struct)
+  def insert(factory_name, attrs) do
+    case @repo do
+      nil      -> raise(EctoFactory.MissingRepo)
+      _present -> build(factory_name, attrs) |> @repo.insert!()
+    end
+  end
+
+  def insert(factory_name, changeset_function, attrs) do
+    case @repo do
+      nil      -> raise(EctoFactory.MissingRepo)
+      _present ->
+        build(factory_name)
+        |> changeset_function.(attrs)
+        |> @repo.insert!()
+    end
+  end
+
+  def insert(factory_name) do
+    case @repo do
+      nil      -> raise(EctoFactory.MissingRepo)
+      _present -> build(factory_name) |> @repo.insert!()
+    end
   end
 
   defp build_attrs(factory_name, attributes) do
@@ -99,6 +117,6 @@ defmodule EctoFactory do
     {key, Ecto.DateTime.cast!(:calendar.universal_time) }
   end
 
-  defp cast({key, value}), do: {key, nil}
+  defp cast({key, _value}), do: {key, nil}
 
 end
