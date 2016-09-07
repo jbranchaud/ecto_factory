@@ -1,6 +1,5 @@
 <h1> <img width="400" src="/logos/ectofactory_logo_text.png"/></h1>
 
-
 Easily generate structs based on your ecto schemas.
 
 [Hex docs homepage](https://hexdocs.pm/ecto_factory/api-reference.html)
@@ -11,11 +10,19 @@ Add ecto_factory to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:ecto_factory, "~> 0.0.5"}]
+  [{:ecto_factory, "~> 1.0"}]
 end
 ```
 
 Configure your `repo` for EctoFactory:
+
+```elixir
+#./config.exs
+
+config :ecto_factory, repo: MyApp.Repo
+```
+
+config :ecto_factory, repo: MyApp.Repo
 
 Using the following `MyApp.User` module:
 
@@ -39,7 +46,7 @@ Configure ecto_factory factories and the `repo` to be used for inserting:
 
 config :ecto_factory, repo: MyApp.Repo
 config :ecto_factory, factories: [
-  :user, MyApp.User 
+  :user, MyApp.User
 
   :user_with_defaults, { MyApp.User, [
     age: 99,
@@ -52,7 +59,7 @@ config :ecto_factory, factories: [
 And that's it. Now use `EctoFactory.build` to create structs.
 
 ```elixir
-EctoFactory.build(:user) 
+EctoFactory.build(:user)
 #=> %MyApp.User{age: 1, username: "username, date_of_birth: #Ecto.DateTime<2016-06-14T17:03:22Z>}
 
 EctoFactory.build(:user, username: "hashrocket")
