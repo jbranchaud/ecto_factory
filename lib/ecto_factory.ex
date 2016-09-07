@@ -34,6 +34,7 @@ defmodule EctoFactory do
       }
 
   """
+  @spec build(atom(), Keyword) :: struct()
   def build(factory_name, attrs \\ []) do
     {model, attributes} = build_attrs(factory_name, attrs)
     struct(model, attributes)
@@ -57,6 +58,7 @@ defmodule EctoFactory do
       }
 
   """
+  @spec insert(atom(), Keyword) :: struct()
   def insert(factory_name, attrs \\[]) do
     unless repo, do: raise(EctoFactory.MissingRepo)
     build(factory_name, attrs) |> repo.insert!()
